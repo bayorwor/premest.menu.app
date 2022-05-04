@@ -32,6 +32,25 @@ const MenuContextProvider = ({ children }) => {
     setIsPending(false);
   }
 
+  async function addMenu({ name, type, ingredients, recipe, time }) {
+    setIsPending(true);
+    await fetch("/api/foods", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({
+        name,
+        type,
+        ingredients,
+        recipe,
+        time,
+      }),
+    });
+    setIsPending(false);
+  }
+
   return (
     <MenuProvider
       value={{
@@ -39,6 +58,7 @@ const MenuContextProvider = ({ children }) => {
         error,
         menus,
         getAllMenus,
+        addMenu,
       }}
     >
       {children}

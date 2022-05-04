@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddMenu from "../components/AddMenu";
 import Header from "../components/Header";
 import { AuthContext } from "../context/auth.context";
 import { MenuContext } from "../context/menu.context";
@@ -7,6 +8,7 @@ import { MenuContext } from "../context/menu.context";
 function Home() {
   const { user, success } = useContext(AuthContext);
   const { isPending, menus, error, getAllMenus } = useContext(MenuContext);
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,9 +22,18 @@ function Home() {
     }
   }, [success, navigate]);
 
+  const toggleShow = () => {
+    setShow(!show);
+  };
+
   return (
     <>
       <Header />
+      <button className="btn btn-info" onClick={toggleShow}>
+        {show ? "close" : "add menu"}
+      </button>
+      {show && <AddMenu />}
+      {/* <AddMenu /> */}
       {isPending && <h2>loading...</h2>}
       <div className="container">
         {menus.map((menu) => (
